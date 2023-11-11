@@ -72,7 +72,6 @@ func GetFoods(ctx *gin.Context) {
 	foods := db.GetFoods()
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "ok",
-		"foods":   foods,
+		"foods": foods,
 	})
 }
