@@ -37,7 +37,7 @@ func OrderFood(ctx *gin.Context) {
 
 	participants := db.GetParticipants()
 	for _, p := range participants {
-		fullName := p.Name + " " + p.Surname
+		fullName := p.Name + p.Surname
 		sum := sha256.Sum256([]byte(fullName))
 		hashed := hex.EncodeToString(sum[:])
 		if nameHash == hashed {
