@@ -35,6 +35,8 @@ func GetParticipants(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"message": "unauthorized",
 		})
+
+		return
 	}
 
 	participants := db.GetParticipants()

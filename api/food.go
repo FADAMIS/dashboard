@@ -66,6 +66,8 @@ func AddFood(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"message": "unauthorized",
 		})
+
+		return
 	}
 
 	var food entities.Food
