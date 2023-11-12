@@ -76,6 +76,69 @@ curl -X POST "http://localhost/register" -d '{"name": "John", "surname": "Smith"
 
 
 
+<details>
+
+<summary><code>POST /login</code></summary>
+
+Login endpoint for administrators
+
+
+---
+### Request
+
+Headers:
+
+- `Content-Type: application/json`
+
+---
+
+| request data |  data type  |  description     |
+|--------------|-------------|------------------|
+| name         |  string     | admin's name     |
+| password     | string      | admin's password |
+
+---
+
+**JSON example**
+```json
+{
+    "name": "admin",
+    "password": "supersecretpassword",
+}
+```
+
+---
+
+**cURL example**
+```javascript
+curl -X POST "http://localhost/login" -d '{"name": "admin", "password": "supersecretpassword"}' -H "Content-Type: application/json"
+```
+
+### Response
+
+---
+
+| Status code  |  Content Type    |
+|--------------|------------------|
+| 200          | application/json |
+
+---
+
+**Sets a session cookie that expires after 6 hours**
+
+**Successful response**
+```json
+{
+    "message": "login successful",
+}
+```
+
+</details>
+
+
+---
+
+
 
 
 

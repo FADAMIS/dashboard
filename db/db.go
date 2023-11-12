@@ -14,7 +14,7 @@ func InitDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(&entities.Food{}, &entities.Participant{})
+	db.AutoMigrate(&entities.Food{}, &entities.Participant{}, &entities.Session{}, &entities.Admin{})
 
 	return db, nil
 }
@@ -60,4 +60,43 @@ func OrderFood(participant entities.Participant, food entities.Food) {
 	food.Participants = append(food.Participants, participant)
 
 	db.Save(&food)
+}
+
+func AddSession(session entities.Session) {
+	db := GetDB()
+
+	db.Create(&session)
+}
+
+func GetSessions() []entities.Session {
+	db := GetDB()
+
+	var sessions []entities.Session
+	db.Find(&sessions)
+
+	return sessions
+}
+
+func DeleteSession(session entities.Session) {
+	db := GetDB()
+
+	db.Delete(&session)
+}
+
+func GetAdmins() []entities.Admin {
+	db := GetDB()
+
+	var admin []entities.Admin
+	db.Find(&admin)
+
+	return admin
+}
+
+func UpdateAdmin(admin entities.Admin) {
+	db := GetDB()
+
+	db.Save(&admin)
+
+	// When admin updates his password, every session gets deleted
+	db.Delete(&entities.Session{}, "username = ?", admin.Username)
 }

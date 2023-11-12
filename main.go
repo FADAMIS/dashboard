@@ -8,7 +8,11 @@ import (
 func main() {
 	server := gin.Default()
 
+	// participant register
 	server.POST("/register", api.Register)
+
+	// admin login
+	server.POST("/login", api.Login)
 
 	server.POST("/order/:name", api.OrderFood)
 

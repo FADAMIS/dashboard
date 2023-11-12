@@ -3,6 +3,7 @@ package api
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"net/http"
 
 	"github.com/FADAMIS/dashboard/db"
@@ -57,6 +58,16 @@ func OrderFood(ctx *gin.Context) {
 }
 
 func AddFood(ctx *gin.Context) {
+	var session entities.Session
+	cookie, _ := ctx.Cookie("session")
+	json.Unmarshal([]byte(cookie), &session)
+
+	if !IsSessionValid(session) {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"message": "unauthorized",
+		})
+	}
+
 	var food entities.Food
 	ctx.Bind(&food)
 
