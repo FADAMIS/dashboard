@@ -94,7 +94,7 @@ Headers:
 
 | request data |  data type  |  description     |
 |--------------|-------------|------------------|
-| name         |  string     | admin's name     |
+| username     |  string     | admin's username |
 | password     | string      | admin's password |
 
 ---
@@ -102,7 +102,7 @@ Headers:
 **JSON example**
 ```json
 {
-    "name": "admin",
+    "username": "admin",
     "password": "supersecretpassword",
 }
 ```
@@ -111,7 +111,7 @@ Headers:
 
 **cURL example**
 ```javascript
-curl -X POST "http://localhost/login" -d '{"name": "admin", "password": "supersecretpassword"}' -H "Content-Type: application/json"
+curl -X POST "http://localhost/login" -d '{"username": "admin", "password": "supersecretpassword"}' -H "Content-Type: application/json"
 ```
 
 ### Response
