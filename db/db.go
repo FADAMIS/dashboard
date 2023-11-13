@@ -31,11 +31,22 @@ func AddFood(food entities.Food) {
 	db.Create(&food)
 }
 
-func GetFoods() []entities.Food {
+// returns all foods WITH plisted articipants
+func GetFoodsAdmin() []entities.Food {
 	db := GetDB()
 
 	var foods []entities.Food
 	db.Model(&entities.Food{}).Preload("Participants").Find(&foods)
+
+	return foods
+}
+
+// returns all foods WITHOUT listed participants
+func GetFoods() []entities.Food {
+	db := GetDB()
+
+	var foods []entities.Food
+	db.Find(&foods)
 
 	return foods
 }

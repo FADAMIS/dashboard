@@ -75,143 +75,11 @@ curl -X POST "http://localhost/register" -d '{"name": "John", "surname": "Smith"
 
 
 
-
-<details>
-
-<summary><code>POST /login</code></summary>
-
-Login endpoint for administrators
-
-
----
-### Request
-
-Headers:
-
-- `Content-Type: application/json`
-
----
-
-| request data |  data type  |  description     |
-|--------------|-------------|------------------|
-| username     |  string     | admin's username |
-| password     | string      | admin's password |
-
----
-
-**JSON example**
-```json
-{
-    "username": "admin",
-    "password": "supersecretpassword",
-}
-```
-
----
-
-**cURL example**
-```javascript
-curl -X POST "http://localhost/login" -d '{"username": "admin", "password": "supersecretpassword"}' -H "Content-Type: application/json"
-```
-
-### Response
-
----
-
-| Status code  |  Content Type    |
-|--------------|------------------|
-| 200          | application/json |
-
----
-
-**Sets a session cookie that expires after 6 hours**
-
-**Successful response**
-```json
-{
-    "message": "login successful",
-}
-```
-
-</details>
-
-
----
-
-
-
-
-
-<details>
-
-<summary><code>GET /participants</code></summary>
-
-Returns all registered participants
-
----
-### Request
-
-Headers:
-
-- None
-
----
-
-| request data |  data type  |
-|--------------|-------------|
-| none         |  none       |
-
----
-
-**cURL example**
-```javascript
-curl "http://localhost/participants"
-```
-
-### Response
-
----
-
-| Status code  |  Content Type    |
-|--------------|------------------|
-| 200          | application/json |
-
----
-
-
-**Successful response**
-```json
-{
-    "participants": [
-        {
-            "ID": 1,
-            "name": "John",
-            "surname": "Smith",
-            "email": "john@smith.com",
-            "phone": "777888999",
-            "food_id": 1                // ID of ordered food
-        }
-    ]
-}
-```
-
-</details>
-
-
-
-
-
-
----
-
-
-
-
 <details>
 
 <summary><code>GET /food</code></summary>
 
-Returns all available food along with all the participants with specifed food already ordered
+Returns all available food
 
 - Also returns ID of the specific food which is later used for participants to order said food
 
@@ -253,17 +121,7 @@ curl "http://localhost/food"
         {
             "id": 1,
             "name": "none",
-            "participants": 
-                [
-                    {
-                        "ID": 1,
-                        "name": "John",
-                        "surname": "Smith", 
-                        "email": "john@smith.com",
-                        "phone": "777888999",
-                        "food_id": 1
-                    }
-                ]
+            "participants": null
         }
     ]
 }
@@ -273,76 +131,7 @@ curl "http://localhost/food"
 
 
 
-
-
-
 ---
-
-
-
-
-<details>
-
-<summary><code>POST /food</code></summary>
-
-Adds new available food to the database
-
----
-### Request
-
-Headers:
-
-- `Content-Type: application/json`
-
----
-
-| request data |  data type  |  description |
-|--------------|-------------|--------------|
-| name         |  string     |  food's name |
-
----
-
-**JSON example**
-```json
-{
-    "name": "Pizza Prosciutto",
-}
-```
-
----
-
-**cURL example**
-```javascript
-curl -X POST "http://localhost/food" -d '{"name": "Pizza Prosciutto"}' -H "Content-Type: application/json"
-```
-
-### Response
-
----
-
-| Status code  |  Content Type    |
-|--------------|------------------|
-| 200          | application/json |
-
----
-
-
-**Successful response**
-```json
-{
-    "message": "food added",
-    "food": "Pizza Prosciutto"
-}
-```
-
-</details>
-
-
-
-
-
----
-
 
 
 <details>
@@ -415,6 +204,284 @@ curl -X POST "http://localhost/order/9d3e2c3ef4399d27897e1d918151cac74ed7b2bee02
 
 
 ---
+
+
+
+
+
+<details>
+
+<summary><code>POST /admin/login</code></summary>
+
+Login endpoint for administrators
+
+
+---
+### Request
+
+Headers:
+
+- `Content-Type: application/json`
+
+---
+
+| request data |  data type  |  description     |
+|--------------|-------------|------------------|
+| username     |  string     | admin's username |
+| password     | string      | admin's password |
+
+---
+
+**JSON example**
+```json
+{
+    "username": "admin",
+    "password": "supersecretpassword",
+}
+```
+
+---
+
+**cURL example**
+```javascript
+curl -X POST "http://localhost/login" -d '{"username": "admin", "password": "supersecretpassword"}' -H "Content-Type: application/json"
+```
+
+### Response
+
+---
+
+| Status code  |  Content Type    |
+|--------------|------------------|
+| 200          | application/json |
+
+---
+
+**Sets a session cookie that expires after 6 hours**
+
+**Successful response**
+```json
+{
+    "message": "login successful",
+}
+```
+
+</details>
+
+
+---
+
+
+
+
+
+<details>
+
+<summary><code>GET /admin/participants</code></summary>
+
+Returns all registered participants
+
+---
+### Request
+
+Headers:
+
+- None
+
+---
+
+| request data |  data type  |
+|--------------|-------------|
+| none         |  none       |
+
+---
+
+**cURL example**
+```javascript
+curl "http://localhost/participants"
+```
+
+### Response
+
+---
+
+| Status code  |  Content Type    |
+|--------------|------------------|
+| 200          | application/json |
+
+---
+
+
+**Successful response**
+```json
+{
+    "participants": [
+        {
+            "ID": 1,
+            "name": "John",
+            "surname": "Smith",
+            "email": "john@smith.com",
+            "phone": "777888999",
+            "food_id": 1                // ID of ordered food
+        }
+    ]
+}
+```
+
+</details>
+
+
+
+
+
+
+---
+
+
+
+
+<details>
+
+<summary><code>GET /admin/food</code></summary>
+
+Returns all available food along with all the participants with specifed food already ordered
+
+- Also returns ID of the specific food which is later used for participants to order said food
+
+---
+### Request
+
+Headers:
+
+- None
+
+---
+
+| request data |  data type  |
+|--------------|-------------|
+| none         |  none       |
+
+---
+
+**cURL example**
+```javascript
+curl "http://localhost/food"
+```
+
+### Response
+
+---
+
+| Status code  |  Content Type    |
+|--------------|------------------|
+| 200          | application/json |
+
+---
+
+
+**Successful response**
+```json
+{
+    "foods": [
+        {
+            "id": 1,
+            "name": "none",
+            "participants": 
+                [
+                    {
+                        "ID": 1,
+                        "name": "John",
+                        "surname": "Smith", 
+                        "email": "john@smith.com",
+                        "phone": "777888999",
+                        "food_id": 1
+                    }
+                ]
+        }
+    ]
+}
+```
+
+</details>
+
+
+
+
+
+
+---
+
+
+
+
+
+
+
+
+
+<details>
+
+<summary><code>POST /admin/food</code></summary>
+
+Adds new available food to the database
+
+---
+### Request
+
+Headers:
+
+- `Content-Type: application/json`
+
+---
+
+| request data |  data type  |  description |
+|--------------|-------------|--------------|
+| name         |  string     |  food's name |
+
+---
+
+**JSON example**
+```json
+{
+    "name": "Pizza Prosciutto",
+}
+```
+
+---
+
+**cURL example**
+```javascript
+curl -X POST "http://localhost/food" -d '{"name": "Pizza Prosciutto"}' -H "Content-Type: application/json"
+```
+
+### Response
+
+---
+
+| Status code  |  Content Type    |
+|--------------|------------------|
+| 200          | application/json |
+
+---
+
+
+**Successful response**
+```json
+{
+    "message": "food added",
+    "food": "Pizza Prosciutto"
+}
+```
+
+</details>
+
+
+
+
+
+---
+
+
 
 
 Backend API written in Go and Gin web framework by [Fabucik](https://github.com/Fabucik)

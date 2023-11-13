@@ -88,3 +88,23 @@ func GetFoods(ctx *gin.Context) {
 		"foods": foods,
 	})
 }
+
+func GetFoodsAdmin(ctx *gin.Context) {
+	var session entities.Session
+	cookie, _ := ctx.Cookie("session")
+	json.Unmarshal([]byte(cookie), &session)
+
+	if !IsSessionValid(session) {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"message": "unauthorized",
+		})
+
+		return
+	}
+
+	foods := db.GetFoodsAdmin()
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"foods": foods,
+	})
+}
