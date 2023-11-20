@@ -1,12 +1,15 @@
 package main
 
 import (
+	"github.com/gin-contrib/gzip"
+
 	"github.com/FADAMIS/dashboard/api"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	server := gin.Default()
+	server.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	// participant register
 	server.POST("/register", api.Register)
