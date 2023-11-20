@@ -1,5 +1,5 @@
 <script>
- let meals = ["pizza", "kebab", "durum", "meal4", "meal5", "pizza", "kebab", "durum", "meal4", "meal5"]
+ let meals = ["pizza", "kebab", "durum", "meal4", "meal5", "pizza", "kebab", "durum", "meal4", "meal5"] 
  let name = "";
  let surname = "";
  let nameSubmit = false;
@@ -20,7 +20,7 @@
 
 	}
 </style>
-
+~
 <body class="w-full h-screen justify">
     <h1 class="font-mono text-6xl text-white text-center mt-10">Výběr jídla</h1>
     <div class="flex justify-center">
