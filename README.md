@@ -120,8 +120,9 @@ curl "http://localhost/food"
     "foods": [
         {
             "id": 1,
-            "name": "none",
-            "participants": null
+            "name": "pizza",
+            "participants": null,
+            "image_path": "/images/322989cf390c0e81fbd89727f2ee7d5f402bf652789d88229751eab26ef2e162.jpeg"
         }
     ]
 }
@@ -317,7 +318,7 @@ curl "http://localhost/participants"
 {
     "participants": [
         {
-            "ID": 1,
+            "id": 1,
             "name": "John",
             "surname": "Smith",
             "email": "john@smith.com",
@@ -389,14 +390,15 @@ curl "http://localhost/food"
             "participants": 
                 [
                     {
-                        "ID": 1,
+                        "id": 1,
                         "name": "John",
                         "surname": "Smith", 
                         "email": "john@smith.com",
                         "phone": "777888999",
                         "food_id": 1
                     }
-                ]
+                ],
+            "image_path": "/images/322989cf390c0e81fbd89727f2ee7d5f402bf652789d88229751eab26ef2e162.jpeg"
         }
     ]
 }
@@ -430,29 +432,31 @@ Adds new available food to the database
 
 Headers:
 
-- `Content-Type: application/json`
+- `Content-Type: multipart/form-data`
 
 ---
 
-| request data |  data type  |  description |
-|--------------|-------------|--------------|
-| name         |  string     |  food's name |
-
----
-
-**JSON example**
-```json
-{
-    "name": "Pizza Prosciutto",
-}
-```
+| request data |  data type  |  description  |
+|--------------|-------------|---------------|
+| name         |  string     |  food's name  |
+| file         |  File       |  food's image |
 
 ---
 
 **cURL example**
 ```javascript
-curl -X POST "http://localhost/food" -d '{"name": "Pizza Prosciutto"}' -H "Content-Type: application/json"
+curl -X POST "http://localhost/admin/food" -F 'name=Pizza' -F 'file=@/home/admin/pizza.jpg' -H "Content-Type: multipart/form-data"
 ```
+
+Image's filename is sha256 checksum of itself + file extension
+
+---
+
+**Allowed file types**
+- jpg
+- png
+
+---
 
 ### Response
 
@@ -469,7 +473,7 @@ curl -X POST "http://localhost/food" -d '{"name": "Pizza Prosciutto"}' -H "Conte
 ```json
 {
     "message": "food added",
-    "food": "Pizza Prosciutto"
+    "food": "Pizza"
 }
 ```
 

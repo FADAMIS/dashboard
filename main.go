@@ -26,5 +26,8 @@ func main() {
 	// returns all foods WITH listed participants
 	server.GET("/admin/food", api.GetFoodsAdmin)
 
+	// uploaded images go here
+	server.Static("/images", "./uploads")
+
 	server.Run()
 }

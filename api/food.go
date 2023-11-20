@@ -70,8 +70,16 @@ func AddFood(ctx *gin.Context) {
 		return
 	}
 
+	fileName := UploadImage(ctx)
+	if fileName == "" {
+		return
+	}
+
+	imagePath := "/images/" + fileName
+
 	var food entities.Food
 	ctx.Bind(&food)
+	food.Imagepath = imagePath
 
 	db.AddFood(food)
 

@@ -1,7 +1,7 @@
 package entities
 
 type Participant struct {
-	ID      uint
+	ID      uint   `json:"id"`
 	Name    string `json:"name"`
 	Surname string `json:"surname"`
 	Email   string `json:"email"`
