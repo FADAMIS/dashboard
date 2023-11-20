@@ -1,5 +1,5 @@
 <script>
-    let islogged = true
+    let islogged = false
     let username = "";
     let password = "";
 </script>
@@ -22,9 +22,9 @@
     {:else}
     <div class="bg-gray-950 mt-40 mb-64 flex justify-center flex-col p-10 rounded-xl gap-1">
         <h1 class="text-gray-300 text-5xl font-mono text-center mt-[-20px]">Admin</h1>
-        <label for="tel" class="text-gray-300 font-mono">usrname:</label>
+        <label for="username" class="text-gray-300 font-mono">usrname:</label>
         <input type="text" class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all" bind:value={username}/>
-        <label for="tel" class="text-gray-300 font-mono">password:</label>
+        <label for="password" class="text-gray-300 font-mono">password:</label>
         <input type="password" class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all" bind:value={password}/>
         <button on:click={submitLogin} class="font-mono w-40 h-12 bg-gray-950 mt-5 text-center rounded-xl self-center hover:bg-green-400 border border-green-400 border-2 transition-all text-gray-300 hover:text-gray-800">Login</button>
     </div>

@@ -6,7 +6,7 @@
     let date = "";
 
     let test = ["kokot", "kokot1", "kokot2"]
-    function submitLogin() {
+    function submitRegister() {
         fetch('/api/login', {
             method: 'POST',
             headers: {
@@ -52,12 +52,13 @@
         <input type="email" class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all" bind:value={email}/>
         <label for="tel" class="text-gray-300 font-mono">telefon:</label>
         <input type="text" class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all" bind:value={telefon}/>
-
-        <select bind:value={date} class="font-mono mt-4 w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all">
+        
+        <label for="term" class="text-gray-300 mt-4 font-mono">termín:</label>
+        <select bind:value={date} class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all">
             {#each test as termin}
             <option value={termin}>{termin}</option>
             {/each}
         </select>
-        <button on:click={submitLogin} class="font-mono w-40 h-12 bg-gray-950 mt-5 text-center rounded-xl self-center hover:bg-green-400 border border-green-400 border-2 transition-all text-gray-300 hover:text-gray-800">Login</button>
+        <button on:click={submitRegister} class="font-mono w-40 h-12 bg-gray-950 mt-5 text-center rounded-xl self-center hover:bg-green-400 border border-green-400 border-2 transition-all text-gray-300 hover:text-gray-800">Registrovat</button>
     </div>
 </body>
