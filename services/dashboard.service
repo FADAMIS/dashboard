@@ -1,0 +1,10 @@
+[Unit]
+Description=Dashboard backend
+
+[Service]
+Restart=always
+User=root
+ExecStart=/bin/dashboard
+
+[Install]
+WantedBy=multi-user.target

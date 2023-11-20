@@ -7,7 +7,7 @@ import (
 )
 
 func InitDB() (*gorm.DB, error) {
-	dbInfo := "host=localhost user=fanda password=test123 dbname=dashboard port=5432 sslmode=disable TimeZone=Europe/Prague"
+	dbInfo := "host=172.17.0.1 user=fanda password=test123 dbname=dashboard port=5432 sslmode=disable TimeZone=Europe/Prague"
 
 	db, err := gorm.Open(postgres.Open(dbInfo), &gorm.Config{})
 	if err != nil {
