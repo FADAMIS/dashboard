@@ -12,22 +12,22 @@ func main() {
 	server.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	// participant register
-	server.POST("/register", api.Register)
+	server.POST("/api/register", api.Register)
 
 	// admin login
-	server.POST("/admin/login", api.Login)
+	server.POST("/api/admin/login", api.Login)
 
-	server.POST("/order/:name", api.OrderFood)
+	server.POST("/api/order/:name", api.OrderFood)
 
-	server.POST("/admin/food", api.AddFood)
+	server.POST("/api/admin/food", api.AddFood)
 
 	// returns all foods WITHOUT listed participants
-	server.GET("/food", api.GetFoods)
+	server.GET("/api/food", api.GetFoods)
 
-	server.GET("/admin/participants", api.GetParticipants)
+	server.GET("/api/admin/participants", api.GetParticipants)
 
 	// returns all foods WITH listed participants
-	server.GET("/admin/food", api.GetFoodsAdmin)
+	server.GET("/api/admin/food", api.GetFoodsAdmin)
 
 	// uploaded images go here
 	server.Static("/images", "./uploads")

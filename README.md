@@ -5,7 +5,7 @@ FADAMIS dashboard is a web dashboard used for administrating SSPŠ camps like Te
 ---
 <details>
 
-<summary><code>POST /register</code></summary>
+<summary><code>POST /api/register</code></summary>
 
 Registers a new participant
 
@@ -77,7 +77,7 @@ curl -X POST "http://localhost/register" -d '{"name": "John", "surname": "Smith"
 
 <details>
 
-<summary><code>GET /food</code></summary>
+<summary><code>GET /api/food</code></summary>
 
 Returns all available food
 
@@ -137,7 +137,7 @@ curl "http://localhost/food"
 
 <details>
 
-<summary><code>POST /order/:name</code></summary>
+<summary><code>POST /api/order/:name</code></summary>
 
 Orders food for the participant specified by `:name` parameter
 
@@ -212,7 +212,7 @@ curl -X POST "http://localhost/order/9d3e2c3ef4399d27897e1d918151cac74ed7b2bee02
 
 <details>
 
-<summary><code>POST /admin/login</code></summary>
+<summary><code>POST /api/admin/login</code></summary>
 
 Login endpoint for administrators
 
@@ -278,7 +278,7 @@ curl -X POST "http://localhost/login" -d '{"username": "admin", "password": "sup
 
 <details>
 
-<summary><code>GET /admin/participants</code></summary>
+<summary><code>GET /api/admin/participants</code></summary>
 
 Returns all registered participants
 
@@ -343,7 +343,7 @@ curl "http://localhost/participants"
 
 <details>
 
-<summary><code>GET /admin/food</code></summary>
+<summary><code>GET /api/admin/food</code></summary>
 
 Returns all available food along with all the participants with specifed food already ordered
 
@@ -423,7 +423,7 @@ curl "http://localhost/food"
 
 <details>
 
-<summary><code>POST /admin/food</code></summary>
+<summary><code>POST /api/admin/food</code></summary>
 
 Adds new available food to the database
 
