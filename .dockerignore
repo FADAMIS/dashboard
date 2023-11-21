@@ -1,4 +1,3 @@
-
 **/.DS_Store
 
 frontend/**/.DS_Store
@@ -13,4 +12,3 @@ frontend/**/.vercel
 frontend/**/.output
 frontend/**/vite.config.js.timestamp-*
 frontend/**/vite.config.ts.timestamp-*
-
