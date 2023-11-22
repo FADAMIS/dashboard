@@ -1,13 +1,19 @@
 package db
 
 import (
+	"os"
+
 	"github.com/FADAMIS/dashboard/entities"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func InitDB() (*gorm.DB, error) {
-	dbInfo := "host=172.17.0.1 user=fanda password=test123 dbname=dashboard port=5432 sslmode=disable TimeZone=Europe/Prague"
+	godotenv.Load()
+	dbPass := os.Getenv(("DB_PASS"))
+
+	dbInfo := "host=172.17.0.1 user=fanda password=" + dbPass + " dbname=dashboard port=5432 sslmode=disable TimeZone=Europe/Prague"
 
 	db, err := gorm.Open(postgres.Open(dbInfo), &gorm.Config{})
 	if err != nil {
