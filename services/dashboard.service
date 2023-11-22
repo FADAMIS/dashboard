@@ -1,10 +1,11 @@
 [Unit]
-Description=Dashboard backend
+Description=Dashboard start
 
 [Service]
 Restart=always
-User=root
-ExecStart=/bin/dashboard
+WorkingDirectory=/app           # CHANGE WITH YOUR PROJECT DIRECTORY
+User=root                       # CHANGE WITH YOUR USER
+ExecStart=docker compose up
 
 [Install]
 WantedBy=multi-user.target
