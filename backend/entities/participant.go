@@ -7,4 +7,5 @@ type Participant struct {
 	Email   string `json:"email"`
 	Phone   string `json:"phone"`
 	FoodID  uint   `json:"food_id"`
+	CampID  uint   `json:"camp_id"`
 }

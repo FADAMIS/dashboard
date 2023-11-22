@@ -2,8 +2,10 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/FADAMIS/dashboard/db"
 	"github.com/FADAMIS/dashboard/entities"
@@ -19,7 +21,28 @@ func Register(ctx *gin.Context) {
 	participant.Name = strings.TrimSpace(participant.Name)
 	participant.Surname = strings.TrimSpace(participant.Surname)
 
-	db.RegisterParticipant(participant)
+	check := 0
+	camps := db.GetCamps()
+	for _, c := range camps {
+		// if camp id exists and camp registration is not expired
+		if c.ID == participant.CampID && c.Expires > time.Now().Unix() {
+			db.RegisterParticipant(participant, c)
+			break
+		} else {
+			check++
+			fmt.Println(check)
+		}
+
+		if check == len(camps) {
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"message": "Camp not available",
+			})
+
+			return
+		}
+	}
+
+	fmt.Println(check)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "register successful",

@@ -27,7 +27,7 @@ func OrderFood(ctx *gin.Context) {
 			check++
 		}
 
-		if check < len(foods) {
+		if check == len(foods) {
 			ctx.JSON(http.StatusNotFound, gin.H{
 				"message": "Food not found",
 			})
@@ -53,7 +53,7 @@ func OrderFood(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusNotFound, gin.H{
-		"message": "User not found",
+		"message": "Participant not found",
 	})
 }
 

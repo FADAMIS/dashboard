@@ -19,8 +19,6 @@ func main() {
 
 	server.POST("/api/order/:name", api.OrderFood)
 
-	server.POST("/api/admin/food", api.AddFood)
-
 	// returns all foods WITHOUT listed participants
 	server.GET("/api/food", api.GetFoods)
 
@@ -28,9 +26,15 @@ func main() {
 
 	// returns all foods WITH listed participants
 	server.GET("/api/admin/food", api.GetFoodsAdmin)
+	server.POST("/api/admin/food", api.AddFood)
+
+	server.POST("/api/admin/camp", api.AddCamp)
+	server.GET("/api/admin/camp", api.GetCampsAdmin)
+
+	server.GET("/api/camp", api.GetCamps)
 
 	// uploaded images go here
-	server.Static("/images", "./uploads")
+	server.Static("/api/images", "./uploads")
 
 	server.Run()
 }
