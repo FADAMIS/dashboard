@@ -24,6 +24,7 @@ Headers:
 | surname      |  string     | participant's surname        |
 | email        |  string     | participant's email          |
 | phone        |  string     | participant's phone number   |
+| camp_id      |  int        | camp's id
 
 ---
 
@@ -33,7 +34,8 @@ Headers:
     "name": "John",
     "surname": "Smith",
     "email": "john@smith.com",
-    "phone": "777888999"
+    "phone": "777888999",
+    "camp_id": 1
 }
 ```
 
