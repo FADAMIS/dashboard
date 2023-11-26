@@ -32,7 +32,15 @@ func SendRegisterConfirm(receiverEmail string, name string, surname string, camp
 
 	d := gomail.NewDialer(senderSmtpHost, senderSmtpPort, senderEmail, senderPassword)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: false, ServerName: senderSmtpHost}
-	d.DialAndSend(m)
+	err := d.DialAndSend(m)
+
+	// try again after ten minutes
+	if err != nil {
+		go func() {
+			time.Sleep(time.Minute * 10)
+			SendRegisterConfirm(receiverEmail, name, surname, campName, date)
+		}()
+	}
 }
 
 func SendParticipantList(receiverEmail string, participants []entities.Participant, campName string) {
@@ -55,17 +63,33 @@ func SendParticipantList(receiverEmail string, participants []entities.Participa
 
 	d := gomail.NewDialer(senderSmtpHost, senderSmtpPort, senderEmail, senderPassword)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: false, ServerName: senderSmtpHost}
-	d.DialAndSend(m)
+	err := d.DialAndSend(m)
+
+	// try again after ten minutes
+	if err != nil {
+		go func() {
+			time.Sleep(time.Minute * 10)
+			SendParticipantList(receiverEmail, participants, campName)
+		}()
+	}
 }
 
 func excelizeParticipants(participants []entities.Participant, campName string) string {
 	f := excelize.NewFile()
 	defer f.Close()
 
+	style, _ := f.NewStyle(&excelize.Style{
+		Font: &excelize.Font{
+			Bold: true,
+		},
+	})
+
 	f.SetCellStr("Sheet1", "A1", "Jméno")
 	f.SetCellStr("Sheet1", "B1", "Příjmení")
 	f.SetCellStr("Sheet1", "C1", "E-Mail")
 	f.SetCellStr("Sheet1", "D1", "Telefon")
+
+	f.SetRowStyle("Sheet1", 1, 1, style)
 
 	for y, p := range participants {
 		v := reflect.ValueOf(p)
