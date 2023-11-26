@@ -4,7 +4,7 @@
     let name = "";
     let surname = "";
     let email = "";
-    let telefon = "";
+    let phone = "";
     let id;
 
     let camps = []
@@ -28,7 +28,7 @@
                 name: name,
                 surname: surname,
                 email: email,
-                telefon:  telefon,
+                phone:  phone,
                 id: parseInt(id)
 
             })
@@ -63,7 +63,7 @@
         <label for="email" class="text-gray-300 font-mono">e_mail:</label>
         <input type="email" class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all" bind:value={email}/>
         <label for="tel" class="text-gray-300 font-mono">telefon:</label>
-        <input type="text" class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all" bind:value={telefon}/>
+        <input type="text" class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all" bind:value={phone}/>
         
         <label for="term" class="text-gray-300 mt-4 font-mono">termín:</label>
         <select bind:value={id} class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all">
