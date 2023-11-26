@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -27,10 +26,10 @@ func Register(ctx *gin.Context) {
 		// if camp id exists and camp registration is not expired
 		if c.ID == participant.CampID && c.Expires > time.Now().Unix() {
 			db.RegisterParticipant(participant, c)
+			SendRegisterConfirm(participant.Email, participant.Name, participant.Surname, c.Name, c.Date)
 			break
 		} else {
 			check++
-			fmt.Println(check)
 		}
 
 		if check == len(camps) {
@@ -41,8 +40,6 @@ func Register(ctx *gin.Context) {
 			return
 		}
 	}
-
-	fmt.Println(check)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "register successful",

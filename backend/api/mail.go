@@ -27,6 +27,7 @@ func SendRegisterConfirm(receiverEmail string, name string, surname string, camp
 	m := gomail.NewMessage()
 	m.SetHeader("From", senderEmail)
 	m.SetHeader("To", receiverEmail)
+	m.SetHeader("Cc", senderEmail)
 	m.SetHeader("Subject", "Potvrzení registrace na kempech TechDays/HackDays")
 	m.SetBody("text/plain", body)
 
@@ -57,6 +58,7 @@ func SendParticipantList(receiverEmail string, participants []entities.Participa
 	m := gomail.NewMessage()
 	m.SetHeader("From", senderEmail)
 	m.SetHeader("To", receiverEmail)
+	m.SetHeader("Cc", senderEmail)
 	m.SetHeader("Subject", "Tabulka účastníků "+campName+" pro tvorbu pohledávek")
 	m.SetBody("text/plain", body)
 	m.Attach(filename)
