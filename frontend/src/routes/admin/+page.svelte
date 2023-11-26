@@ -2,6 +2,19 @@
     let islogged = false
     let username = "";
     let password = "";
+
+    function submitLogin() {
+        fetch('/api/admin/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        }).then(res => islogged = res.status == 200)
+    }
 </script>
 
 <style>
