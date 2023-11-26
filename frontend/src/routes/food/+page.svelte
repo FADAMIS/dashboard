@@ -51,8 +51,8 @@
     <div class="flex justify-center">
         {#if nameSubmit && name != "" && surname != ""}
         <div class="grid grid-cols-3 gap-12 mb-10 w-full p-20 place-content-center"> 
-            {#each meals as meal}
-            <button class="aspect-square basis-1/3 bg-red-400 rounded-3xl text-center" use:sendMeal>{meal.name}</button>
+            {#each meals as meal (meal)}
+            <button class="aspect-square basis-1/3 bg-red-400 rounded-3xl text-center" on:click={() => sendMeal(meal.name)}>{meal.name}</button>
             {/each}
         </div>
         {:else}
