@@ -38,9 +38,7 @@
 
     onMount(async () => {
         fetch('/api/camp').then(response => response.json()).then(data => {
-            for(let i = 0;i < data.camps.length;i++) {
-                camps.push(data.camps[i])
-            }
+            camps =data.camps
         })
     })
 </script>

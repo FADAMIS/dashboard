@@ -28,9 +28,7 @@
 
  onMount(async () => {
     fetch('/api/food').then(response => response.json()).then(data => {
-    for(let i = 0;i < data.foods.length;i++) {
-        meals.push(data.foods[i])
-    }
+        meals = data.foods
  })
 })
 
