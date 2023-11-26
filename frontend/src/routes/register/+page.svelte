@@ -29,7 +29,7 @@
                 surname: surname,
                 email: email,
                 phone:  phone,
-                id: parseInt(id)
+                camp_id: parseInt(id)
 
             })
         })
