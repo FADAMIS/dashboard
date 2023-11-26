@@ -1,14 +1,39 @@
 <script>
- let meals = ["pizza", "kebab", "durum", "meal4", "meal5", "pizza", "kebab", "durum", "meal4", "meal5"] 
+ import sha256 from 'crypto-js/sha256';
+ import { onMount } from 'svelte';
+
+ let meals = [];
  let name = "";
  let surname = "";
  let nameSubmit = false;
 
+ function sendMeal(mealname) {
+    fetch('/api/order/' + sha256(name+surname), {
+        method: POST,
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({
+            'id': meals.find(item => item.name === mealname).id,
+            'name': mealname
+        })
+    })
+ }
+
  function submitName() {
-    if(name != "" || surname != "") {
-        nameSubmit = !nameSubmit;
+    if(name != "" && name[0] == name[0].toUpperCase() && surname != "" && surname[0] == surname[0].toUpperCase()) {
+        nameSubmit = !nameSubmit
     }
  }
+
+ onMount(async () => {
+    fetch('/api/food').then(response => response.json()).then(data => {
+    for(i = 0;i < data.foods;i++) {
+        meals.push(data.foods[i])
+    }
+ })
+})
+
 </script>
 
 <style>
@@ -27,9 +52,9 @@
         {#if nameSubmit && name != "" && surname != ""}
         <div class="grid grid-cols-3 gap-12 mb-10 w-full p-20 place-content-center"> 
             {#each meals as meal}
-            <div class="aspect-square basis-1/3 bg-red-400 rounded-3xl text-center">
-                <h1 class="font-mono text-white font-extrabold text-2xl mt-32">{meal}</h1>
-            </div>
+            <button class="aspect-square basis-1/3 bg-red-400 rounded-3xl text-center" on:click={sendMeal(meal.name)}>
+                <h1 class="font-mono text-white font-extrabold text-2xl mt-32">{meal.name.toUpperCase()}</h1>
+            </button>
             {/each}
         </div>
         {:else}
