@@ -52,7 +52,7 @@
         {#if nameSubmit && name != "" && surname != ""}
         <div class="grid grid-cols-3 gap-12 mb-10 w-full p-20 place-content-center"> 
             {#each meals as meal}
-            <button class="aspect-square basis-1/3 bg-red-400 rounded-3xl text-center" on:click={sendMeal(meal.name)}>
+            <button class="aspect-square basis-1/3 bg-red-400 rounded-3xl text-center" on:click={() => sendMeal(meal.name)}>
                 <h1 class="font-mono text-white font-extrabold text-2xl mt-32">{meal.name.toUpperCase()}</h1>
             </button>
             {/each}

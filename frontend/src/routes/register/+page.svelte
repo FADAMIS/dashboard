@@ -1,11 +1,13 @@
 <script>
+    import { onMount } from 'svelte';
+
     let name = "";
     let surname = "";
     let email = "";
     let telefon = "";
     let date = "";
 
-    let test = ["kokot", "kokot1", "kokot2"]
+    let camps = []
     function submitRegister() {
         fetch('/api/login', {
             method: 'POST',
@@ -29,6 +31,11 @@
             // Handle any errors
         });
     }
+
+    onMount(async () => {
+        fetch('/api/camps').then(response => response.json()).then(data => {
+        })
+    })
 </script>
 
 <style>
@@ -55,7 +62,7 @@
         
         <label for="term" class="text-gray-300 mt-4 font-mono">termín:</label>
         <select bind:value={date} class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all">
-            {#each test as termin}
+            {#each camps as termin}
             <option value={termin}>{termin}</option>
             {/each}
         </select>
