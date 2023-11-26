@@ -2,7 +2,7 @@
  import sha256 from 'crypto-js/sha256';
  import { onMount } from 'svelte';
 
- let meals = [{"name": "pizza"}];
+ let meals = [];
  let name = "";
  let surname = "";
  let nameSubmit = false;
@@ -52,7 +52,7 @@
         {#if nameSubmit && name != "" && surname != ""}
         <div class="grid grid-cols-3 gap-12 mb-10 w-full p-20 place-content-center"> 
             {#each meals as meal (meal)}
-            <button style="background-image: url({meal.image_path})" class="aspect-square basis-1/3 bg- rounded-3xl text-center font-mono text-3xl text-white " on:click={() => sendMeal(meal.name)}>{meal.name}</button>
+            <button style="background-image: url({meal.image_path})" class="object-cover aspect-square basis-1/3 bg- rounded-3xl text-center font-mono text-3xl text-white " on:click={() => sendMeal(meal.name)}>{meal.name}</button>
             {/each}
         </div>
         {:else}
