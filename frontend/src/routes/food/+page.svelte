@@ -7,6 +7,12 @@
  let surname = "";
  let nameSubmit = false;
 
+ function submitName() {
+    if(name != "" && name[0] == name[0].toUpperCase() && surname != "" && surname[0] == surname[0].toUpperCase()) {
+        nameSubmit = !nameSubmit
+    }
+ }
+
  function sendMeal(mealname) {
     fetch('/api/order/' + sha256(name+surname), {
         method: 'POST',
@@ -18,12 +24,6 @@
             'name': mealname
         })
     })
- }
-
- function submitName() {
-    if(name != "" && name[0] == name[0].toUpperCase() && surname != "" && surname[0] == surname[0].toUpperCase()) {
-        nameSubmit = !nameSubmit
-    }
  }
 
  onMount(async () => {
@@ -52,9 +52,7 @@
         {#if nameSubmit && name != "" && surname != ""}
         <div class="grid grid-cols-3 gap-12 mb-10 w-full p-20 place-content-center"> 
             {#each meals as meal}
-            <button class="aspect-square basis-1/3 bg-red-400 rounded-3xl text-center" on:click={() => sendMeal(meal.name)}>
-                <h1 class="font-mono text-white font-extrabold text-2xl mt-32">{meal.name.toUpperCase()}</h1>
-            </button>
+            <button class="aspect-square basis-1/3 bg-red-400 rounded-3xl text-center" on:sendMeal>{meal.name}</button>
             {/each}
         </div>
         {:else}
