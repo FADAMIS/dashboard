@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/FADAMIS/dashboard/db"
 	"github.com/FADAMIS/dashboard/entities"
@@ -20,25 +19,26 @@ func Register(ctx *gin.Context) {
 	participant.Name = strings.TrimSpace(participant.Name)
 	participant.Surname = strings.TrimSpace(participant.Surname)
 
-	check := 0
+	check := false
 	camps := db.GetCamps()
 	for _, c := range camps {
 		// if camp id exists and camp registration is not expired
-		if c.ID == participant.CampID && c.Expires > time.Now().Unix() {
+		if c.ID == participant.CampID && !c.Processed {
+			check = true
 			db.RegisterParticipant(participant, c)
-			SendRegisterConfirm(participant.Email, participant.Name, participant.Surname, c.Name, c.Date)
+			SendRegisterConfirmation(participant.Email, participant.Name, participant.Surname, c.Name, c.Date)
 			break
-		} else {
-			check++
 		}
 
-		if check == len(camps) {
-			ctx.JSON(http.StatusNotFound, gin.H{
-				"message": "Camp not available",
-			})
+		check = false
+	}
 
-			return
-		}
+	if !check {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "Camp not available",
+		})
+
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{

@@ -2,6 +2,9 @@ package api
 
 import (
 	"crypto/tls"
+	"encoding/json"
+	"fmt"
+	"net/http"
 	"os"
 	"reflect"
 	"strings"
@@ -9,20 +12,24 @@ import (
 
 	"strconv"
 
+	"github.com/FADAMIS/dashboard/db"
 	"github.com/FADAMIS/dashboard/entities"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/xuri/excelize/v2"
 	"gopkg.in/gomail.v2"
 )
 
-func SendRegisterConfirm(receiverEmail string, name string, surname string, campName string, date string) {
+func SendRegisterConfirmation(receiverEmail string, name string, surname string, campName string, date int64) {
 	godotenv.Load()
 	senderEmail := os.Getenv("EMAIL_ADDRESS")
 	senderPassword := os.Getenv("EMAIL_PASS")
 	senderSmtpHost := os.Getenv("EMAIL_SMTP_HOST")
 	senderSmtpPort, _ := strconv.Atoi(os.Getenv("EMAIL_SMTP_PORT"))
 
-	body := "Potvrzení registrace účastníka " + name + " " + surname + " na kempu " + campName + ", který se bude konat " + date + ". Tato zpráva byla automaticky generována"
+	dateString := time.Unix(date, 0).Format("02_January_2006")
+
+	body := "Potvrzení registrace účastníka " + name + " " + surname + " na kempu " + campName + ", který se bude konat " + dateString + ". Tato zpráva byla automaticky generována"
 
 	m := gomail.NewMessage()
 	m.SetHeader("From", senderEmail)
@@ -39,27 +46,30 @@ func SendRegisterConfirm(receiverEmail string, name string, surname string, camp
 	if err != nil {
 		go func() {
 			time.Sleep(time.Minute * 10)
-			SendRegisterConfirm(receiverEmail, name, surname, campName, date)
+			SendRegisterConfirmation(receiverEmail, name, surname, campName, date)
 		}()
 	}
 }
 
-func SendParticipantList(receiverEmail string, participants []entities.Participant, campName string) {
-	filename := excelizeParticipants(participants, campName)
+func SendParticipantList(camp entities.Camp) {
+	filename := excelizeParticipants(camp)
 
 	godotenv.Load()
-	senderEmail := os.Getenv("EMAIL_ADDRESS")
-	senderPassword := os.Getenv("EMAIL_PASS")
+	receiverEmail := os.Getenv("RECEIVER_ADDRESS")
+	senderEmail := os.Getenv("SENDER_ADDRESS")
+	senderPassword := os.Getenv("SENDER_PASS")
 	senderSmtpHost := os.Getenv("EMAIL_SMTP_HOST")
 	senderSmtpPort, _ := strconv.Atoi(os.Getenv("EMAIL_SMTP_PORT"))
 
-	body := "Dobrý den,\nzde je zaslána tabulka s účastníky kempu" + campName + " určena pro tvorbu pohledávek. Tato zpráva byla automaticky generována."
+	campDate := time.Unix(camp.Date, 0).Format("02_January_2006")
+
+	body := "Dobrý den,\nzde je tabulka s účastníky kempu" + camp.Name + " " + campDate + ". Tato zpráva byla vygenerována automaticky.\nS pozdravem\nTým kempů"
 
 	m := gomail.NewMessage()
 	m.SetHeader("From", senderEmail)
 	m.SetHeader("To", receiverEmail)
 	m.SetHeader("Cc", senderEmail)
-	m.SetHeader("Subject", "Tabulka účastníků "+campName+" pro tvorbu pohledávek")
+	m.SetHeader("Subject", camp.Name+" "+campDate+" - prezence")
 	m.SetBody("text/plain", body)
 	m.Attach(filename)
 
@@ -71,12 +81,14 @@ func SendParticipantList(receiverEmail string, participants []entities.Participa
 	if err != nil {
 		go func() {
 			time.Sleep(time.Minute * 10)
-			SendParticipantList(receiverEmail, participants, campName)
+			SendParticipantList(camp)
 		}()
 	}
 }
 
-func excelizeParticipants(participants []entities.Participant, campName string) string {
+func excelizeParticipants(camp entities.Camp) string {
+	participants := camp.Participants
+
 	f := excelize.NewFile()
 	defer f.Close()
 
@@ -111,9 +123,66 @@ func excelizeParticipants(participants []entities.Participant, campName string) 
 		}
 	}
 
-	filename := "./backup/" + strings.ToLower(campName) + "_" + time.Now().Format("02_January_2006") + ".xlsx"
+	date := time.Unix(camp.Date, 0).Format("02_January_2006")
+	filename := "./backup/" + strings.ToLower(camp.Name) + "_" + date + ".xlsx"
 
 	f.SaveAs(filename)
 
 	return filename
+}
+
+// Disable registration and send participant list
+func ProcessCamp(ctx *gin.Context) {
+	var session entities.Session
+	cookie, _ := ctx.Cookie("session")
+	json.Unmarshal([]byte(cookie), &session)
+
+	if !IsSessionValid(session) {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"message": "unauthorized",
+		})
+
+		return
+	}
+
+	var camp entities.Camp
+	ctx.Bind(&camp)
+
+	fmt.Println(camp.Name)
+	fmt.Println(camp.ID)
+
+	allCamps := db.GetCampsAdmin()
+
+	contains := false
+	for _, c := range allCamps {
+		if camp.Name == c.Name && camp.ID == c.ID {
+			camp = c
+			contains = true
+			break
+		}
+
+		contains = false
+	}
+
+	if !contains {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "camp not found",
+		})
+
+		return
+	}
+
+	if !camp.Processed {
+		camp.Processed = true
+		db.ProcessCamp(camp)
+		SendParticipantList(camp)
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"message": "camp processed",
+		})
+	} else {
+		ctx.JSON(http.StatusConflict, gin.H{
+			"message": "camp was already processed",
+		})
+	}
 }

@@ -31,6 +31,9 @@ func main() {
 	server.POST("/api/admin/camp", api.AddCamp)
 	server.GET("/api/admin/camp", api.GetCampsAdmin)
 
+	// disable registration and send participant list
+	server.POST("/api/admin/process", api.ProcessCamp)
+
 	server.GET("/api/camp", api.GetCamps)
 
 	// uploaded images go here

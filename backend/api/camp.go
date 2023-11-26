@@ -25,6 +25,8 @@ func AddCamp(ctx *gin.Context) {
 	var camp entities.Camp
 	ctx.Bind(&camp)
 
+	camp.Processed = false
+
 	db.AddCamp(camp)
 
 	ctx.JSON(http.StatusOK, gin.H{

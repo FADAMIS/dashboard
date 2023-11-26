@@ -11,6 +11,7 @@ services:
       - 8080:8080
     volumes:
       - static:/app/uploads
+      - backup:/app/backup
     hostname: backend.docker
   caddy:
     build: ./caddy
@@ -19,3 +20,4 @@ services:
       - 443:443
 volumes:
   static:
+  backup:

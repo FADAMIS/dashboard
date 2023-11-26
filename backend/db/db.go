@@ -125,6 +125,12 @@ func AddCamp(camp entities.Camp) {
 	db.Create(&camp)
 }
 
+func ProcessCamp(camp entities.Camp) {
+	db := GetDB()
+
+	db.Model(&entities.Camp{}).Where("id = ?", camp.ID).Update("processed", true)
+}
+
 func GetCamps() []entities.Camp {
 	db := GetDB()
 

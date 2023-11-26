@@ -17,23 +17,24 @@ func OrderFood(ctx *gin.Context) {
 	var food entities.Food
 	ctx.Bind(&food)
 
-	check := 0
+	check := false
 	foods := db.GetFoods()
 	for _, f := range foods {
 
 		if f.Name == food.Name && f.ID == food.ID {
+			check = true
 			break
-		} else {
-			check++
 		}
 
-		if check == len(foods) {
-			ctx.JSON(http.StatusNotFound, gin.H{
-				"message": "Food not found",
-			})
+		check = false
+	}
 
-			return
-		}
+	if !check {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "Food not found",
+		})
+
+		return
 	}
 
 	participants := db.GetParticipants()
