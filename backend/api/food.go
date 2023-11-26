@@ -22,6 +22,7 @@ func OrderFood(ctx *gin.Context) {
 	for _, f := range foods {
 
 		if f.Name == food.Name && f.ID == food.ID {
+			food = f
 			check = true
 			break
 		}
