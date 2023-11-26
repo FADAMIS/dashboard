@@ -5,7 +5,7 @@
     let surname = "";
     let email = "";
     let telefon = "";
-    let id = null;
+    let id;
 
     let camps = []
 
@@ -34,12 +34,6 @@
             })
         })
         .then(response => response.json())
-        .then(data => {
-            // Handle the response data
-        })
-        .catch(error => {
-            // Handle any errors
-        });
     }
 
     onMount(async () => {
