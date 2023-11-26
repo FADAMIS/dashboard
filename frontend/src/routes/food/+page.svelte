@@ -9,7 +9,7 @@
 
  function sendMeal(mealname) {
     fetch('/api/order/' + sha256(name+surname), {
-        method: POST,
+        method: 'POST',
         headers: {
             'Content-Type' : 'application/json'
         },
