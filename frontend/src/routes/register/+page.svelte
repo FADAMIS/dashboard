@@ -5,11 +5,21 @@
     let surname = "";
     let email = "";
     let telefon = "";
-    let date = "";
+    let id = null;
 
     let camps = []
+
+    function convertUnixTime(unixTime) {
+        const date = new Date(unixTime * 1000);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
+        return `${day}.${month}. ${year}`;
+    }
+
     function submitRegister() {
-        fetch('/api/login', {
+        fetch('/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -19,7 +29,7 @@
                 surname: surname,
                 email: email,
                 telefon:  telefon,
-                date: date
+                id: id
 
             })
         })
@@ -64,9 +74,9 @@
         <input type="text" class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all" bind:value={telefon}/>
         
         <label for="term" class="text-gray-300 mt-4 font-mono">termín:</label>
-        <select bind:value={date} class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all">
+        <select bind:value={id} class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all">
             {#each camps as termin}
-            <option value={termin}>{termin}</option>
+            <option value={termin.id}>{termin.name + " - " + convertUnixTime(termin.date)}</option>
             {/each}
         </select>
         <button on:click={submitRegister} class="font-mono w-40 h-12 bg-gray-950 mt-5 text-center rounded-xl self-center hover:bg-green-400 border border-green-400 border-2 transition-all text-gray-300 hover:text-gray-800">Registrovat</button>
