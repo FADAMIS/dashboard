@@ -70,7 +70,7 @@
         <label for="term" class="text-gray-300 mt-4 font-mono">termín:</label>
         <select bind:value={id} class="font-mono w-80 h-10 rounded-xl p-2 text-center bg-slate-950 hover:bg-indigo-800 border border-indigo-500 border-2 text-gray-300 transition-all">
             {#each camps as termin (termin)}
-            <option value={termin.id}>{termin.name + " - " + convertUnixTime(termin.date)}</option>
+            <option value={termin.id}>{termin.name + " - "}{() => convertUnixTime(termin.date)}</option>
             {/each}
         </select>
         <button on:click={submitRegister} class="font-mono w-40 h-12 bg-gray-950 mt-5 text-center rounded-xl self-center hover:bg-green-400 border border-green-400 border-2 transition-all text-gray-300 hover:text-gray-800">Registrovat</button>
