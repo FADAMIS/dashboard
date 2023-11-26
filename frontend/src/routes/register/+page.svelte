@@ -29,7 +29,7 @@
                 surname: surname,
                 email: email,
                 telefon:  telefon,
-                id: ParseInt(id)
+                id: parseInt(id)
 
             })
         })
