@@ -23,7 +23,7 @@ func Register(ctx *gin.Context) {
 	camps := db.GetCamps()
 	for _, c := range camps {
 		// if camp id exists and camp registration is not expired
-		if c.ID == participant.CampID && !c.Processed {
+		if c.ID == participant.CampID && !c.Closed {
 			check = true
 			db.RegisterParticipant(participant, c)
 			SendRegisterConfirmation(participant.Email, participant.Name, participant.Surname, c.Name, c.Date)

@@ -25,12 +25,13 @@ func AddCamp(ctx *gin.Context) {
 	var camp entities.Camp
 	ctx.Bind(&camp)
 
-	camp.Processed = false
+	camp.Closed = false
 
 	db.AddCamp(camp)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "camp added",
+		"camp":    camp.Name,
 	})
 }
 
@@ -47,7 +48,7 @@ func GetCamps(ctx *gin.Context) {
 
 	// if registration is closed, remove camp
 	for i, c := range camps {
-		if c.Processed {
+		if c.Closed {
 			filteredCamps = RemoveCamp(camps, i)
 		}
 	}
@@ -72,16 +73,61 @@ func GetCampsAdmin(ctx *gin.Context) {
 
 	camps := db.GetCampsAdmin()
 
-	filteredCamps := camps
+	ctx.JSON(http.StatusOK, gin.H{
+		"camps": camps,
+	})
+}
 
-	// if registration is closed, remove camp
-	for i, c := range camps {
-		if c.Processed {
-			filteredCamps = RemoveCamp(camps, i)
-		}
+// Disable registration and send participant list
+func CloseCamp(ctx *gin.Context) {
+	var session entities.Session
+	cookie, _ := ctx.Cookie("session")
+	json.Unmarshal([]byte(cookie), &session)
+
+	if !IsSessionValid(session) {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"message": "unauthorized",
+		})
+
+		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"camps": filteredCamps,
-	})
+	var camp entities.Camp
+	ctx.Bind(&camp)
+
+	allCamps := db.GetCampsAdmin()
+
+	contains := false
+	for _, c := range allCamps {
+		if camp.Name == c.Name && camp.ID == c.ID {
+			camp = c
+			contains = true
+			break
+		}
+
+		contains = false
+	}
+
+	if !contains {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "camp not found",
+		})
+
+		return
+	}
+
+	if !camp.Closed {
+		camp.Closed = true
+		db.CloseCamp(camp)
+		SendParticipantList(camp)
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"message": "camp closed",
+			"camp":    camp.Name,
+		})
+	} else {
+		ctx.JSON(http.StatusConflict, gin.H{
+			"message": "camp was already closed",
+		})
+	}
 }

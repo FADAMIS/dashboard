@@ -126,10 +126,10 @@ func AddCamp(camp entities.Camp) {
 	db.Create(&camp)
 }
 
-func ProcessCamp(camp entities.Camp) {
+func CloseCamp(camp entities.Camp) {
 	db := GetDB()
 
-	db.Model(&entities.Camp{}).Where("id = ?", camp.ID).Update("processed", true)
+	db.Model(&entities.Camp{}).Where("id = ?", camp.ID).Update("closed", true)
 }
 
 func GetCamps() []entities.Camp {

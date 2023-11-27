@@ -5,6 +5,6 @@ type Camp struct {
 	Name         string        `json:"name"`
 	Date         int64         `json:"date"`
 	Participants []Participant `json:"participants"`
-	// tells if camp is processed - turns to "true" when email with listed participants is sent
-	Processed bool `json:"processed"`
+	// tells if camp is closed - turns to "true" when email with listed participants is sent
+	Closed bool `json:"processed"`
 }

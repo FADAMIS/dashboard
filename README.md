@@ -2,7 +2,41 @@
 
 FADAMIS dashboard is a web dashboard used for administrating SSPŠ camps like TechDays or HackDays. API reference below.
 
+## Dependencies
+- Docker (instalation guide [here](https://docs.docker.com/engine/install/))
+- Docker compose (instalation guide [here](https://docs.docker.com/compose/install/))
+
+## Instalation
+**If your machine is booted with systemd (dashboard runs automatically on startup):**
+``` bash
+git clone https://github.com/FADAMIS/dashboard
+cd dashboard
+sudo make # this adds systemd service to your machine
+```
+
 ---
+
+**Others:**
+``` bash
+git clone https://github.com/FADAMIS/dashboard
+cd dashboard
+docker-compose build
+```
+Then run with `docker-compose up`
+
+
+
+
+
+## After install
+
+When the dashboard is first started, the database will have sample data in `camps`, `admins` and `foods` tables.
+
+**Default admin login** - `admin`:`admin`
+
+
+## API Reference
+
 <details>
 
 <summary><code>POST /api/register</code></summary>
@@ -43,7 +77,7 @@ Headers:
 
 **cURL example**
 ```javascript
-curl -X POST "http://localhost/register" -d '{"name": "John", "surname": "Smith", "email": "john@smith.com", "phone": "777888999"}' -H "Content-Type: application/json"
+curl -X POST "http://localhost/api/register" -d '{"name": "John", "surname": "Smith", "email": "john@smith.com", "phone": "777888999"}' -H "Content-Type: application/json"
 ```
 
 ### Response
@@ -66,6 +100,70 @@ curl -X POST "http://localhost/register" -d '{"name": "John", "surname": "Smith"
 
 </details>
 
+
+
+
+---
+
+
+
+
+
+<details>
+
+<summary><code>GET /api/camp</code></summary>
+
+Returns all available camps
+
+---
+### Request
+
+Headers:
+
+- None
+
+---
+
+| request data |  data type  |
+|--------------|-------------|
+| none         |  none       |
+
+---
+
+**cURL example**
+```javascript
+curl "http://localhost/api/camp"
+```
+
+### Response
+
+---
+
+| Status code  |  Content Type    |
+|--------------|------------------|
+| 200          | application/json |
+
+---
+
+`date` is `int64` (it is stored as Unix timestamp)
+
+
+**Successful response**
+```json
+{
+    "camps": [
+        {
+            "id": 1,
+            "name": "TechDays!",
+            "participants": null,
+            "date": 1701302400,
+            "processed": false
+        }
+    ]
+}
+```
+
+</details>
 
 
 
@@ -102,7 +200,7 @@ Headers:
 
 **cURL example**
 ```javascript
-curl "http://localhost/food"
+curl "http://localhost/api/food"
 ```
 
 ### Response
@@ -150,7 +248,7 @@ sha256(JohnSmith)
 ---->
 9d3e2c3ef4399d27897e1d918151cac74ed7b2bee028fea50d29d7d8ea3f925e
 ---->
-http://localhost/order/9d3e2c3ef4399d27897e1d918151cac74ed7b2bee028fea50d29d7d8ea3f925e
+http://localhost/api/order/9d3e2c3ef4399d27897e1d918151cac74ed7b2bee028fea50d29d7d8ea3f925e
 ```
 
 ---
@@ -181,7 +279,7 @@ Headers:
 
 **cURL example**
 ```javascript
-curl -X POST "http://localhost/order/9d3e2c3ef4399d27897e1d918151cac74ed7b2bee028fea50d29d7d8ea3f925e" -d '{"id": 1, "name": "Pizza Prosciutto"}' -H "Content-Type: application/json"
+curl -X POST "http://localhost/api/order/9d3e2c3ef4399d27897e1d918151cac74ed7b2bee028fea50d29d7d8ea3f925e" -d '{"id": 1, "name": "Pizza Prosciutto"}' -H "Content-Type: application/json"
 ```
 
 ### Response
@@ -247,7 +345,7 @@ Headers:
 
 **cURL example**
 ```javascript
-curl -X POST "http://localhost/login" -d '{"username": "admin", "password": "supersecretpassword"}' -H "Content-Type: application/json"
+curl -X POST "http://localhost/api/admin/login" -d '{"username": "admin", "password": "supersecretpassword"}' -H "Content-Type: application/json"
 ```
 
 ### Response
@@ -301,7 +399,7 @@ Headers:
 
 **cURL example**
 ```javascript
-curl "http://localhost/participants"
+curl "http://localhost/api/participants"
 ```
 
 ### Response
@@ -368,7 +466,7 @@ Headers:
 
 **cURL example**
 ```javascript
-curl "http://localhost/food"
+curl "http://localhost/api/admin/food"
 ```
 
 ### Response
@@ -447,7 +545,7 @@ Headers:
 
 **cURL example**
 ```javascript
-curl -X POST "http://localhost/admin/food" -F 'name=Pizza' -F 'file=@/home/admin/pizza.jpg' -H "Content-Type: multipart/form-data"
+curl -X POST "http://localhost/api/admin/food" -F 'name=Pizza' -F 'file=@/home/admin/pizza.jpg' -H "Content-Type: multipart/form-data"
 ```
 
 Image's filename is sha256 checksum of itself + file extension
@@ -488,6 +586,198 @@ Image's filename is sha256 checksum of itself + file extension
 ---
 
 
+
+
+<details>
+
+<summary><code>GET /api/admin/camp</code></summary>
+
+Returns all (even expired) camps
+
+---
+### Request
+
+**Requires session cookie**
+
+Headers:
+
+- None
+
+---
+
+| request data |  data type  |
+|--------------|-------------|
+| none         |  none       |
+
+---
+
+**cURL example**
+```javascript
+curl "http://localhost/api/admin/camp"
+```
+
+### Response
+
+---
+
+| Status code  |  Content Type    |
+|--------------|------------------|
+| 200          | application/json |
+
+---
+
+
+**Successful response**
+```json
+{
+    "foods": [
+        {
+            "id": 1,
+            "name": "TechDays",
+            "participants": 
+                [
+                    {
+                        "id": 1,
+                        "name": "John",
+                        "surname": "Smith", 
+                        "email": "john@smith.com",
+                        "phone": "777888999",
+                        "food_id": 1
+                    }
+                ],
+            "date": 1701302400,
+            "processed": false
+        }
+    ]
+}
+```
+
+</details>
+
+
+
+---
+
+
+
+
+<details>
+
+<summary><code>POST /api/admin/camp</code></summary>
+
+Adds new camp to the database
+
+---
+### Request
+
+Headers:
+
+- `Content-Type: application/json`
+
+---
+
+| request data |  data type  |  description                   |
+|--------------|-------------|--------------------------------|
+| name         |  string     |  camp's name                   |
+| date         |  int64      |  camp's date as Unix timestamp |
+
+---
+
+**cURL example**
+```javascript
+curl -X POST "http://localhost/api/admin/camp" -d "{'name': 'TechDays', 'date': 1701302400}" -H "Content-Type: application/json"
+```
+
+---
+
+### Response
+
+---
+
+| Status code  |  Content Type    |
+|--------------|------------------|
+| 200          | application/json |
+
+---
+
+
+**Successful response**
+```json
+{
+    "message": "camp added",
+    "camp": "TechDays"
+}
+```
+
+</details>
+
+
+
+
+
+---
+
+
+
+
+
+
+<details>
+
+<summary><code>POST /api/admin/close</code></summary>
+
+Closes camp registration and sends email with information.
+
+---
+### Request
+
+Headers:
+
+- `Content-Type: application/json`
+
+---
+
+| request data |  data type  |  description                   |
+|--------------|-------------|--------------------------------|
+| id           |  uint       |  camp's ID                   |
+| name         |  string     |  camp's name                   |
+| date         |  int64      |  camp's date as Unix timestamp |
+
+---
+
+**cURL example**
+```javascript
+curl -X POST "http://localhost/api/admin/close" -d "{'id': 1, 'name': 'TechDays', 'date': 1701302400}" -H "Content-Type: application/json"
+```
+
+---
+
+### Response
+
+---
+
+| Status code  |  Content Type    |
+|--------------|------------------|
+| 200          | application/json |
+
+---
+
+
+**Successful response**
+```json
+{
+    "message": "camp closed",
+    "camp": "TechDays"
+}
+```
+
+</details>
+
+
+
+
+
+---
 
 
 Backend API written in Go and Gin web framework by [Fabucik](https://github.com/Fabucik)

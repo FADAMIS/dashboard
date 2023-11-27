@@ -2,9 +2,6 @@ package api
 
 import (
 	"crypto/tls"
-	"encoding/json"
-	"fmt"
-	"net/http"
 	"os"
 	"reflect"
 	"strings"
@@ -12,9 +9,7 @@ import (
 
 	"strconv"
 
-	"github.com/FADAMIS/dashboard/db"
 	"github.com/FADAMIS/dashboard/entities"
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/xuri/excelize/v2"
 	"gopkg.in/gomail.v2"
@@ -129,60 +124,4 @@ func excelizeParticipants(camp entities.Camp) string {
 	f.SaveAs(filename)
 
 	return filename
-}
-
-// Disable registration and send participant list
-func ProcessCamp(ctx *gin.Context) {
-	var session entities.Session
-	cookie, _ := ctx.Cookie("session")
-	json.Unmarshal([]byte(cookie), &session)
-
-	if !IsSessionValid(session) {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"message": "unauthorized",
-		})
-
-		return
-	}
-
-	var camp entities.Camp
-	ctx.Bind(&camp)
-
-	fmt.Println(camp.Name)
-	fmt.Println(camp.ID)
-
-	allCamps := db.GetCampsAdmin()
-
-	contains := false
-	for _, c := range allCamps {
-		if camp.Name == c.Name && camp.ID == c.ID {
-			camp = c
-			contains = true
-			break
-		}
-
-		contains = false
-	}
-
-	if !contains {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"message": "camp not found",
-		})
-
-		return
-	}
-
-	if !camp.Processed {
-		camp.Processed = true
-		db.ProcessCamp(camp)
-		SendParticipantList(camp)
-
-		ctx.JSON(http.StatusOK, gin.H{
-			"message": "camp processed",
-		})
-	} else {
-		ctx.JSON(http.StatusConflict, gin.H{
-			"message": "camp was already processed",
-		})
-	}
 }

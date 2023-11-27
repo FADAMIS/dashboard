@@ -32,7 +32,7 @@ func main() {
 	server.GET("/api/admin/camp", api.GetCampsAdmin)
 
 	// disable registration and send participant list
-	server.POST("/api/admin/process", api.ProcessCamp)
+	server.POST("/api/admin/close", api.CloseCamp)
 
 	server.GET("/api/camp", api.GetCamps)
 
