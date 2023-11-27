@@ -1,7 +1,20 @@
 <script>
+    import { onMount } from "svelte";
+
     let islogged = false
-    let username = "";
-    let password = "";
+    let username = ""
+    let password = ""
+
+    onMount(async () => {
+        fetch('/api/admin/participants').then(response => {
+            if (!response.ok) {
+                islogged = false;
+            }
+            else {
+                islogged = true;
+            }
+        })
+    })
 
     function submitLogin() {
         fetch('/api/admin/login', {
