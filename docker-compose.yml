@@ -5,7 +5,8 @@ services:
     hostname: frontend.docker
   backend:
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     build: ./backend
     volumes:
       - static:/app/uploads
@@ -17,14 +18,19 @@ services:
       - 80:80
       - 443:443
   postgres:
-    image: postgres:alpine3.17
+    build: ./postgres
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
     env_file:
-      - ./scripts/postgres.env
+      - ./postgres/postgres.env
     hostname: database.docker
     ports:
       - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker"]
+      interval: 1s
+      timeout: 5s
+      retries: 30
 volumes:
   static:
   backup:
