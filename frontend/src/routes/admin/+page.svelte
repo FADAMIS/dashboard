@@ -56,7 +56,7 @@
                     <h1>{participant.name} {participant.surname}</h1>
                     <h1>{participant.email}</h1>
                     <h1>{participant.phone}</h1>
-                <!--<h1>{meals.find(item => item.id === participants.food_id).name}</h1>-->
+                    <h1>{participant.food_id}</h1>
                 </div>
             {/each}
         </div>

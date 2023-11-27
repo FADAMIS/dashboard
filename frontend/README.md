@@ -13,8 +13,8 @@ Frontend for FADAMIS Dashboard written in SvelteKit.
 Install frontend with npm (Dev server runs on localhost:5173)
 
 ```bash
-  npm install
-  npm run dev
+  $ npm install
+  $ npm run dev
 ```
     
 ## Deployment
@@ -30,4 +30,3 @@ Deploy regularly with npm nad nodejs (By default deploy build runs on 0.0.0.0:30
 ## Authors
 
 - [@DuckyScr](https://github.com/DuckyScr)
-
