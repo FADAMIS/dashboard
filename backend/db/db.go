@@ -11,9 +11,10 @@ import (
 
 func InitDB() (*gorm.DB, error) {
 	godotenv.Load()
+	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv(("DB_PASS"))
 
-	dbInfo := "host=172.17.0.1 user=fanda password=" + dbPass + " dbname=dashboard port=5432 sslmode=disable TimeZone=Europe/Prague"
+	dbInfo := "host=database.docker user=" + dbUser + " password=" + dbPass + " dbname=dashboard port=5432 sslmode=disable TimeZone=Europe/Prague"
 
 	db, err := gorm.Open(postgres.Open(dbInfo), &gorm.Config{})
 	if err != nil {

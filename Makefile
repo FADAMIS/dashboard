@@ -1,5 +1,5 @@
 dashboard: dependencies
-	cp services/dashboard.service /etc/systemd/system
+	cp scripts/dashboard.service /etc/systemd/system
 	systemctl enable dashboard
 	systemctl start dashboard
 
@@ -19,3 +19,8 @@ dependencies:
 	sudo apt-get update
 
 	sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
+
+docker:
+	git pull
+	docker-compose build
+	docker-compose up

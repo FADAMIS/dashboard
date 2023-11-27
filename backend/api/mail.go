@@ -22,12 +22,12 @@ import (
 
 func SendRegisterConfirmation(receiverEmail string, name string, surname string, campName string, date int64) {
 	godotenv.Load()
-	senderEmail := os.Getenv("EMAIL_ADDRESS")
-	senderPassword := os.Getenv("EMAIL_PASS")
-	senderSmtpHost := os.Getenv("EMAIL_SMTP_HOST")
-	senderSmtpPort, _ := strconv.Atoi(os.Getenv("EMAIL_SMTP_PORT"))
+	senderEmail := os.Getenv("SENDER_ADDRESS")
+	senderPassword := os.Getenv("SENDER_PASS")
+	senderSmtpHost := os.Getenv("SMTP_HOST")
+	senderSmtpPort, _ := strconv.Atoi(os.Getenv("SMTP_PORT"))
 
-	dateString := time.Unix(date, 0).Format("02_January_2006")
+	dateString := time.Unix(date, 0).Format("02. 01. 2006")
 
 	body := "Potvrzení registrace účastníka " + name + " " + surname + " na kempu " + campName + ", který se bude konat " + dateString + ". Tato zpráva byla automaticky generována"
 
@@ -58,10 +58,10 @@ func SendParticipantList(camp entities.Camp) {
 	receiverEmail := os.Getenv("RECEIVER_ADDRESS")
 	senderEmail := os.Getenv("SENDER_ADDRESS")
 	senderPassword := os.Getenv("SENDER_PASS")
-	senderSmtpHost := os.Getenv("EMAIL_SMTP_HOST")
-	senderSmtpPort, _ := strconv.Atoi(os.Getenv("EMAIL_SMTP_PORT"))
+	senderSmtpHost := os.Getenv("SMTP_HOST")
+	senderSmtpPort, _ := strconv.Atoi(os.Getenv("SMTP_PORT"))
 
-	campDate := time.Unix(camp.Date, 0).Format("02_January_2006")
+	campDate := time.Unix(camp.Date, 0).Format("02. 01. 2006")
 
 	body := "Dobrý den,\nzde je tabulka s účastníky kempu" + camp.Name + " " + campDate + ". Tato zpráva byla vygenerována automaticky.\nS pozdravem\nTým kempů"
 

@@ -2,13 +2,11 @@ version: '3.8'
 services:
   frontend:
     build: ./frontend
-    ports:
-      - 3000:3000
     hostname: frontend.docker
   backend:
+    depends_on:
+      - postgres
     build: ./backend
-    ports:
-      - 8080:8080
     volumes:
       - static:/app/uploads
       - backup:/app/backup
@@ -18,6 +16,16 @@ services:
     ports:
       - 80:80
       - 443:443
+  postgres:
+    image: postgres:alpine3.17
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
+    env_file:
+      - ./scripts/postgres.env
+    hostname: database.docker
+    ports:
+      - 5432:5432
 volumes:
   static:
   backup:
+  pgdata:
