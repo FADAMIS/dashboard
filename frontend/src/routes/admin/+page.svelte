@@ -4,6 +4,8 @@
     let islogged = false
     let username = ""
     let password = ""
+    let meals = []
+    let participants = []
 
     onMount(async () => {
         fetch('/api/admin/participants').then(response => {
@@ -12,6 +14,12 @@
             }
             else {
                 islogged = true;
+                fetch('/api/admin/participants').then(res => res.json()).then(data => {
+                    participants = data.participants
+                })
+                fetch('/api/admin/food').then(res => res.json()).then(data => {
+                    meals = data.foods
+                })
             }
         })
     })
@@ -43,7 +51,14 @@
 <body class="flex w-full h-screen justify-center">
     {#if islogged}
         <div class="bg-gray-950 mt-40 mb-64 p-10 rounded-xl">
-
+            {#each participants as participant (participant)}
+                <div class="flex full text-white">
+                    <h1>{participant.name} {participant.surname}</h1>
+                    <h1>{participant.email}</h1>
+                    <h1>{participant.phone}</h1>
+                <!--<h1>{meals.find(item => item.id === participants.food_id).name}</h1>-->
+                </div>
+            {/each}
         </div>
     {:else}
     <div class="bg-gray-950 mt-40 mb-64 flex justify-center flex-col p-10 rounded-xl gap-1">

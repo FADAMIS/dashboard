@@ -50,7 +50,7 @@
         {#if nameSubmit && name != "" && surname != ""}
         <div class="grid grid-cols-3 gap-12 mb-10 w-full p-20 place-content-center"> 
             {#each meals as meal (meal)}
-            <button style="background-image: url({meal.image_path}); background-size: cover; background-position: center;" class="aspect-square basis-1/3 bg- rounded-3xl text-center font-mono text-4xl text-white uppercase" on:click={() => sendMeal(meal.name)}>{meal.name}</button>
+            <button style="background-image: url({meal.image_path}); background-size: cover; background-position: center;" class="aspect-square basis-1/3 rounded-3xl text-center font-mono text-4xl text-white uppercase" on:click={() => sendMeal(meal.name)}>{meal.name}</button>
             {/each}
         </div>
         {:else}
