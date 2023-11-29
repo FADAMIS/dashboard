@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/FADAMIS/dashboard/db"
 	"github.com/FADAMIS/dashboard/entities"
@@ -12,7 +13,7 @@ import (
 )
 
 func OrderFood(ctx *gin.Context) {
-	nameHash := ctx.Param("name")
+	participantHash := ctx.Param("name")
 
 	var food entities.Food
 	ctx.Bind(&food)
@@ -40,13 +41,18 @@ func OrderFood(ctx *gin.Context) {
 
 	participants := db.GetParticipants()
 	for _, p := range participants {
-		fullName := p.Name + p.Surname
-		sum := sha256.Sum256([]byte(fullName))
+		/*
+			hash is combination of name, surname and camp ID
+			because one participant can be registered to multiple camps
+		*/
+		preHash := p.Name + p.Surname + strconv.Itoa(int(p.CampID))
+		sum := sha256.Sum256([]byte(preHash))
 		hashed := hex.EncodeToString(sum[:])
-		if nameHash == hashed {
+
+		if participantHash == hashed {
 			db.OrderFood(p, food)
 			ctx.JSON(http.StatusOK, gin.H{
-				"name": fullName,
+				"name": preHash,
 				"food": food.Name,
 			})
 

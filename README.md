@@ -241,14 +241,14 @@ curl "http://localhost/api/food"
 
 Orders food for the participant specified by `:name` parameter
 
-- `:name` must be a sha256 sum of `name+surname`
+- `:name` must be a sha256 sum of `name+surname+camp_id`
 - Example:
 ```
-sha256(JohnSmith)
+sha256(JohnSmith1)
 ---->
-9d3e2c3ef4399d27897e1d918151cac74ed7b2bee028fea50d29d7d8ea3f925e
+4850eecac63c272e9009385e399f958599a79d96345d2a0e3500d63e7cf2839c
 ---->
-http://localhost/api/order/9d3e2c3ef4399d27897e1d918151cac74ed7b2bee028fea50d29d7d8ea3f925e
+http://localhost/api/order/4850eecac63c272e9009385e399f958599a79d96345d2a0e3500d63e7cf2839c
 ```
 
 ---
