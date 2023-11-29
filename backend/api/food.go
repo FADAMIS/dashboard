@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"net/http"
+	"slices"
 	"strconv"
 
 	"github.com/FADAMIS/dashboard/db"
@@ -18,50 +19,43 @@ func OrderFood(ctx *gin.Context) {
 	var food entities.Food
 	ctx.Bind(&food)
 
-	check := false
 	foods := db.GetFoods()
-	for _, f := range foods {
-
-		if f.Name == food.Name && f.ID == food.ID {
-			food = f
-			check = true
-			break
-		}
-
-		check = false
-	}
-
-	if !check {
+	foodIndex := slices.IndexFunc(foods, func(f entities.Food) bool { return f.Name == food.Name && f.ID == food.ID })
+	if foodIndex == -1 {
 		ctx.JSON(http.StatusNotFound, gin.H{
-			"message": "Food not found",
+			"message": "food not found",
 		})
 
 		return
 	}
 
+	food = foods[foodIndex]
+
 	participants := db.GetParticipants()
-	for _, p := range participants {
+	participantIndex := slices.IndexFunc(participants, func(p entities.Participant) bool {
 		/*
 			hash is combination of name, surname and camp ID
-			because one participant can be registered to multiple camps
+			camp ID because one participant can be registered to multiple camps
 		*/
 		preHash := p.Name + p.Surname + strconv.Itoa(int(p.CampID))
 		sum := sha256.Sum256([]byte(preHash))
 		hashed := hex.EncodeToString(sum[:])
 
-		if participantHash == hashed {
-			db.OrderFood(p, food)
-			ctx.JSON(http.StatusOK, gin.H{
-				"name": preHash,
-				"food": food.Name,
-			})
+		return participantHash == hashed
+	})
 
-			return
-		}
+	if participantIndex == -1 {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "Participant not found",
+		})
+
+		return
 	}
 
-	ctx.JSON(http.StatusNotFound, gin.H{
-		"message": "Participant not found",
+	db.OrderFood(participants[participantIndex], food)
+	ctx.JSON(http.StatusOK, gin.H{
+		"name": participants[participantIndex].Name + " " + participants[participantIndex].Surname,
+		"food": food.Name,
 	})
 }
 

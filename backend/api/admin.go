@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/FADAMIS/dashboard/db"
@@ -21,23 +22,25 @@ func Login(ctx *gin.Context) {
 	credentials.Password = hex.EncodeToString(sum[:])
 
 	admins := db.GetAdmins()
-	for _, a := range admins {
-		if credentials.Username == a.Username && credentials.Password == a.Password {
-			session := newSession(credentials.Username)
-			jsonSession, _ := json.Marshal(session)
+	adminIndex := slices.IndexFunc(admins, func(a entities.Admin) bool {
+		return credentials.Username == a.Username && credentials.Password == a.Password
+	})
 
-			// CHANGE DOMAIN IN THE COOKIE
-			ctx.SetCookie("session", string(jsonSession), 6*60*60, "/", "localhost", false, true)
-			ctx.JSON(http.StatusOK, gin.H{
-				"message": "login successful",
-			})
+	if adminIndex == -1 {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"message": "login failed",
+		})
 
-			return
-		}
+		return
 	}
 
-	ctx.JSON(http.StatusUnauthorized, gin.H{
-		"message": "login failed",
+	session := newSession(credentials.Username)
+	jsonSession, _ := json.Marshal(session)
+	// CHANGE DOMAIN IN THE COOKIE
+	ctx.SetCookie("session", string(jsonSession), 6*60*60, "/", "localhost", false, true)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "login successful",
 	})
 }
 
@@ -56,18 +59,11 @@ func newSession(username string) entities.Session {
 // Checks if a session is valid and deletes the session if it is expired
 func IsSessionValid(session entities.Session) bool {
 	sessions := db.GetSessions()
+	sessionIndex := slices.IndexFunc(sessions, func(s entities.Session) bool { return s == session })
 
-	for _, s := range sessions {
-		if s == session {
-			if session.Expires < time.Now().Unix() {
-				db.DeleteSession(session)
-
-				return false
-			}
-
-			return true
-		}
+	if sessionIndex == -1 || session.Expires < time.Now().Unix() {
+		return false
 	}
 
-	return false
+	return true
 }

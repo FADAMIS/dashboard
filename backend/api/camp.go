@@ -46,7 +46,7 @@ func GetCamps(ctx *gin.Context) {
 
 	filteredCamps := camps
 
-	// if registration is closed, remove camp
+	// if registration is closed, remove camp from returned array
 	for i, c := range camps {
 		if c.Closed {
 			filteredCamps = RemoveCamp(camps, i)
