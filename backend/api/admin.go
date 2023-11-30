@@ -37,7 +37,7 @@ func Login(ctx *gin.Context) {
 	session := newSession(credentials.Username)
 	jsonSession, _ := json.Marshal(session)
 	// CHANGE DOMAIN IN THE COOKIE
-	ctx.SetCookie("session", string(jsonSession), 6*60*60, "/", "localhost", false, true)
+	ctx.SetCookie("session", string(jsonSession), 6*60*60, "/", "fadamis.live", false, true)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "login successful",
