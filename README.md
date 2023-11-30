@@ -4,7 +4,6 @@ FADAMIS dashboard is a web dashboard used for administrating SSPŠ camps like Te
 
 ## Dependencies
 - Docker (instalation guide [here](https://docs.docker.com/engine/install/))
-- Docker compose (instalation guide [here](https://docs.docker.com/compose/install/))
 
 ## Instalation
 **If your machine is booted with systemd (dashboard runs automatically on startup):**
