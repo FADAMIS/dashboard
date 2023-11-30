@@ -1,4 +1,8 @@
-:80 {
+example.com {
 	reverse_proxy /api/* backend.docker:8080
 	reverse_proxy /* frontend.docker:3000
+}
+
+pg.example.com {
+	reverse_proxy pgadmin.docker:8000
 }
