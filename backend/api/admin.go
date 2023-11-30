@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"net/http"
+	"os"
 	"slices"
 	"time"
 
@@ -12,9 +13,12 @@ import (
 	"github.com/FADAMIS/dashboard/entities"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/joho/godotenv"
 )
 
 func Login(ctx *gin.Context) {
+	godotenv.Load()
+
 	var credentials entities.Admin
 	ctx.Bind(&credentials)
 
@@ -37,7 +41,7 @@ func Login(ctx *gin.Context) {
 	session := newSession(credentials.Username)
 	jsonSession, _ := json.Marshal(session)
 	// CHANGE DOMAIN IN THE COOKIE
-	ctx.SetCookie("session", string(jsonSession), 6*60*60, "/", "fadamis.live", false, true)
+	ctx.SetCookie("session", string(jsonSession), 6*60*60, "/", os.Getenv("DOMAIN"), false, true)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "login successful",

@@ -1,3 +1,6 @@
+config:
+	cd backend; go run . -config
+
 dashboard:
 	cp scripts/dashboard.service /etc/systemd/system
 	systemctl enable dashboard

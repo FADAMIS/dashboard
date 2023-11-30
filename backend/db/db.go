@@ -11,8 +11,8 @@ import (
 
 func InitDB() (*gorm.DB, error) {
 	godotenv.Load()
-	dbUser := os.Getenv("DB_USER")
-	dbPass := os.Getenv(("DB_PASS"))
+	dbUser := os.Getenv("POSTGRES_USER")
+	dbPass := os.Getenv(("POSTGRES_PASSWORD"))
 
 	dbInfo := "host=database.docker user=" + dbUser + " password=" + dbPass + " dbname=dashboard port=5432 sslmode=disable TimeZone=Europe/Prague"
 
@@ -23,10 +23,12 @@ func InitDB() (*gorm.DB, error) {
 
 	db.AutoMigrate(&entities.Food{}, &entities.Camp{}, &entities.Participant{}, &entities.Session{}, &entities.Admin{})
 
+	DB = db
+
 	return db, nil
 }
 
-var DB, _ = InitDB()
+var DB *gorm.DB
 
 func GetDB() *gorm.DB {
 	return DB

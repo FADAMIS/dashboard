@@ -15,3 +15,5 @@ frontend/**/vite.config.ts.timestamp-*
 
 backend/.env
 backend/backup/*.xlsx
+postgres/pgadmin.env
+postgres/postgres.env
