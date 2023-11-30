@@ -1,8 +1,8 @@
-example.com {
+fadamis.live {
 	reverse_proxy /api/* backend.docker:8080
 	reverse_proxy /* frontend.docker:3000
 }
 
-pg.example.com {
-	reverse_proxy pgadmin.docker:8000
+metabase.fadamis.live {
+	reverse_proxy metabase.docker:3000
 }

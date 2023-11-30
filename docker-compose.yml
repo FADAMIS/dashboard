@@ -31,17 +31,14 @@ services:
       interval: 1s
       timeout: 5s
       retries: 30
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    hostname: pgadmin.docker
+  metabase:
+    image: metabase/metabase:latest
+    hostname: metabase.docker
     depends_on:
       postgres:
         condition: service_healthy
     ports:
-      - 8080:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=fadamis@fadamis.live
-      - PGADMIN_DEFAULT_PASSWORD=fadamis
+      - 3000:3000
 volumes:
   static:
   backup:
