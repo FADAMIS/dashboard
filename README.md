@@ -6,10 +6,20 @@ FADAMIS dashboard is a web dashboard used for administrating SSPŠ camps like Te
 - Docker (instalation guide [here](https://docs.docker.com/engine/install/))
 
 ## Instalation
-**If your machine is booted with systemd (dashboard runs automatically on startup):**
+
 ``` bash
 git clone https://github.com/FADAMIS/dashboard
-cd dashboard
+```
+
+Now you have to edit some information that are specific to you:
+- in `dashboard/backend/api/admin.go` edit `domain` in `ctx.SetCookie`
+- in `dashboard/docker-compose.yml` edit `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_EMAIL`
+- in `dashboard/docker/dashboard.service` edit `WorkingDirectory` and `User` 
+
+
+**If your machine is booted with systemd (dashboard runs automatically on startup):**
+``` bash
+# in project directory
 sudo make # this adds systemd service to your machine
 ```
 
@@ -17,8 +27,7 @@ sudo make # this adds systemd service to your machine
 
 **Others:**
 ``` bash
-git clone https://github.com/FADAMIS/dashboard
-cd dashboard
+# in project directory
 docker-compose build
 ```
 Then run with `docker-compose up`
