@@ -23,12 +23,10 @@ func InitDB() (*gorm.DB, error) {
 
 	db.AutoMigrate(&entities.Food{}, &entities.Camp{}, &entities.Participant{}, &entities.Session{}, &entities.Admin{})
 
-	DB = db
-
 	return db, nil
 }
 
-var DB *gorm.DB
+var DB, _ = InitDB()
 
 func GetDB() *gorm.DB {
 	return DB
