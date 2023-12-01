@@ -2,6 +2,14 @@
 
 echo "Begin initial setup"
 
+read -p "Continue? (y/n) " choice
+case "$choice" in 
+  y|Y ) echo "yes";;
+  n|N ) exit 0;;
+  * ) echo "Invalid option - exiting..." && exit 0;;
+esac
+
+
 # env file lines, env write file
 function SetupEnvFiles {
     lines=("$@")

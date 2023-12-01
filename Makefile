@@ -1,5 +1,5 @@
 config:
-	cd backend; go run . -config
+	scripts/config.sh
 
 dashboard:
 	cp scripts/dashboard.service /etc/systemd/system
