@@ -9,29 +9,19 @@ FADAMIS dashboard is a web dashboard used for administrating SSPŠ camps like Te
 
 ``` bash
 git clone https://github.com/FADAMIS/dashboard
-make config # creates main .env file containing basic information
+cd dashboard
+make config # creates .env files containing configuration info
 ```
 
 Now you have to edit some informations that are true to you:
-- in `scripts/dashboard.service` edit `WorkingDirectory` and `User`
 - in `caddy/Caddyfile` edit `fadamis.live` to match your domain
 
 
-**If your machine is booted with systemd (dashboard runs automatically on startup):**
 ``` bash
 # in project directory
-sudo make dashboard # this adds systemd service to your machine
+make docker
 ```
-
----
-
-**Others:**
-``` bash
-# in project directory
-docker compose build
-```
-Then run with `docker-compose up`
-
+This builds all images and starts all containers. Every container restarts on host reboot.
 
 
 

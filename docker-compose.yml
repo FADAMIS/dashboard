@@ -3,6 +3,7 @@ services:
   frontend:
     build: ./frontend
     hostname: frontend.docker
+    restart: unless-stopped
   backend:
     depends_on:
       postgres:
@@ -12,11 +13,13 @@ services:
       - static:/app/uploads
       - backup:/app/backup
     hostname: backend.docker
+    restart: unless-stopped
   caddy:
     build: ./caddy
     ports:
       - 80:80
       - 443:443
+    restart: unless-stopped
   postgres:
     build: ./postgres
     volumes:
@@ -31,6 +34,7 @@ services:
       interval: 1s
       timeout: 5s
       retries: 30
+    restart: unless-stopped
   pgadmin:
     image: dpage/pgadmin4:latest
     hostname: pgadmin.docker
@@ -39,9 +43,9 @@ services:
         condition: service_healthy
     ports:
       - 8080:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=fadamis@fadamis.live
-      - PGADMIN_DEFAULT_PASSWORD=fadamis
+    env_file:
+      - ./postgres/pgadmin.env
+    restart: unless-stopped
 volumes:
   static:
   backup:
