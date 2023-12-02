@@ -20,6 +20,9 @@ services:
       - 80:80
       - 443:443
     restart: unless-stopped
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
   postgres:
     build: ./postgres
     volumes:
@@ -50,3 +53,5 @@ volumes:
   static:
   backup:
   pgdata:
+  caddy_data:
+  caddy_config:
