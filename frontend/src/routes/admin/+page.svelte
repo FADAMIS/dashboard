@@ -39,24 +39,32 @@
 </script>
 
 <style>
-	body {
-		background-color: #e5e5f7;
-		opacity: 0.83;
-		background-image: radial-gradient(#444cf7 0.7px, rgb(2, 2, 15) 0.7px);
-		background-size: 20px 20px;	
+    @keyframes bg-animation {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: 0 100vh;
+        }
+    }
 
-	}
+    body {
+        background-color: #e5e5f7;
+        background-image: radial-gradient(#444cf7 1px, rgb(2, 2, 15) 1px);
+        background-size: 40px 40px;
+        animation: bg-animation 60s linear infinite;
+    }
 </style>
 
-<body class="flex w-full h-screen justify-center">
+<body class="overflow-hidden flex w-full h-screen justify-center">
     {#if islogged}
-        <div class="bg-gray-950 mt-40 mb-64 p-10 rounded-xl">
-            {#each participants as participant (participant)}
+        <div class="overflow-scroll bg-gray-950 mt-40 mb-64 p-10 rounded-xl">
+            {#each participants as participant}
                 <div class="flex full text-white">
                     <h1>{participant.name} {participant.surname}</h1>
                     <h1>{participant.email}</h1>
                     <h1>{participant.phone}</h1>
-                    <h1>{participant.food_id}</h1>
+                    <h1>{meals.find(item => item.id === participant.food_id).name}</h1>
                 </div>
             {/each}
         </div>
