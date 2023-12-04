@@ -77,7 +77,7 @@ func AddFood(ctx *gin.Context) {
 		return
 	}
 
-	imagePath := "/images/" + fileName
+	imagePath := "/api/images/" + fileName
 
 	var food entities.Food
 	ctx.Bind(&food)
